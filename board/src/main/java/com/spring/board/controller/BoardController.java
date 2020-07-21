@@ -15,6 +15,7 @@ import com.spring.board.form.BoardForm;
 import com.spring.board.service.BoardService;
 
 @Controller
+//@RequestMapping(value = "/board")
 public class BoardController {
 
 	@Autowired
@@ -102,4 +103,22 @@ public class BoardController {
 
 		return boardDto;
 	}
+
+	/**게시판 - 답글페이지 이동*/
+	@RequestMapping(value="/boardReply")
+	public String boardReply(HttpServletRequest request, HttpServletResponse response)throws Exception{
+		return "board/boardReply";
+	}
+
+	/** 게시판 - 답글 등록 */
+	@RequestMapping(value = "/insertBoardReply")
+	@ResponseBody
+	public BoardDto insertBoardReply(HttpServletRequest request, HttpServletResponse response, BoardForm boardForm)
+			throws Exception {
+
+		BoardDto boardDto = boardService.insertBoardReply(boardForm);
+
+		return boardDto;
+	}
+
 }

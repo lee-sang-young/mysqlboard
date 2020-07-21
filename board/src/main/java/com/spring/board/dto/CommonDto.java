@@ -1,6 +1,7 @@
 package com.spring.board.dto;
 
 public class CommonDto {
+
 	int limit;
 	int offset;
 	String pagination;

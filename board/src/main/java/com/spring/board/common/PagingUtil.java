@@ -3,6 +3,9 @@ package com.spring.board.common;
 import com.spring.board.dto.CommonDto;
 import com.spring.board.form.CommonForm;
 
+/**
+ * 페이지 네비게이션 정보 설정을 위한 클래스
+ */
 public class PagingUtil {
 
 	public static CommonDto setPageUtil(CommonForm commonForm) {
@@ -43,22 +46,17 @@ public class PagingUtil {
 
 		// 페이지 네이게이션 설정
 		pagination += "<div class='pagination'>";
-		pagination += "<a href='javascript:" + functionName + "(\"" + totalFirstPage
-				+ "\");' class=\"direction_left01\">[<<]</a>";
-		pagination += "<a href='javascript:" + functionName + "(" + prePerPage
-				+ ");' class=\"direction_left01\">[<]</a>";
+		pagination += "<a href='javascript:" + functionName + "(\"" + totalFirstPage + "\");' class=\"direction_left01\">[<<]</a>";
+		pagination += "<a href='javascript:" + functionName + "(" + prePerPage + ");' class=\"direction_left01\">[<]</a>";
 		for (int a = viewFirstPage; a <= ViewLastPage; a++) {
 			if (a == currentPage) {
-				pagination += "<a href='javascript:" + functionName + "(\"" + a + "\");' class='onpage'>[" + a
-						+ "]</a>";
+				pagination += "<a href='javascript:" + functionName + "(\"" + a + "\");' class='onpage'>[" + a + "]</a>";
 			} else {
 				pagination += "<a href='javascript:" + functionName + "(\"" + a + "\");'>[" + a + "]</a>";
 			}
 		}
-		pagination += "<a href='javascript:" + functionName + "(" + nextPerPage
-				+ ");' class=\"direction_right01\">[>]</a>";
-		pagination += "<a href='javascript:" + functionName + "(" + totalLastPage
-				+ ");' class=\"direction_right01\">[>>]</a>";
+		pagination += "<a href='javascript:" + functionName + "(" + nextPerPage + ");' class=\"direction_right01\">[>]</a>";
+		pagination += "<a href='javascript:" + functionName + "(" + totalLastPage + ");' class=\"direction_right01\">[>>]</a>";
 		pagination += "</div>";
 
 		int offset = ((currentPage - 1) * countPerList); // 한 화면의 표출되는 게시물의 시작 번호 (쿼리 조건절)

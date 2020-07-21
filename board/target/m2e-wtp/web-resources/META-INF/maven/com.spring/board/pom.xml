@@ -147,6 +147,7 @@
 			<version>${jackson.version}</version>
 		</dependency>
 
+
 		<!-- @Resource -->
 		<dependency>
 			<groupId>javax.annotation</groupId>

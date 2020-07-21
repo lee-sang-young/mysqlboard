@@ -20,7 +20,7 @@ import com.spring.board.form.BoardForm;
 import com.spring.board.service.BoardService;
 
 @Controller
-//@RequestMapping(value = "/board")
+@RequestMapping(value = "/board")
 public class BoardController {
 
 	@Autowired
@@ -36,8 +36,7 @@ public class BoardController {
 	/** 게시판 - 목록 조회 */
 	@RequestMapping(value = "/getBoardList")
 	@ResponseBody
-	public ResultUtil getBoardList(HttpServletRequest request, HttpServletResponse response, BoardForm boardForm)
-			throws Exception {
+	public ResultUtil getBoardList(HttpServletRequest request, HttpServletResponse response, BoardForm boardForm) throws Exception {
 
 		ResultUtil resultUtils = boardService.getBoardList(boardForm);
 
@@ -54,11 +53,12 @@ public class BoardController {
 	/** 게시판 - 상세 조회 */
 	@RequestMapping(value = "/getBoardDetail")
 	@ResponseBody
-	public BoardDto getBoardDetail(HttpServletRequest request, HttpServletResponse response, BoardForm boardForm)
-			throws Exception {
+	public BoardDto getBoardDetail(HttpServletRequest request, HttpServletResponse response, BoardForm boardForm) throws Exception {
+
+		MDC.put("TRANSACTION_ID", String.valueOf(boardForm.getBoard_seq()));
 
 		BoardDto boardDto = boardService.getBoardDetail(boardForm);
-		
+
 		MDC.remove("TRANSACTION_ID");
 
 		return boardDto;
@@ -74,8 +74,7 @@ public class BoardController {
 	/** 게시판 - 등록 */
 	@RequestMapping(value = "/insertBoard")
 	@ResponseBody
-	public BoardDto insertBoard(HttpServletRequest request, HttpServletResponse response, BoardForm boardForm)
-			throws Exception {
+	public BoardDto insertBoard(HttpServletRequest request, HttpServletResponse response, BoardForm boardForm) throws Exception {
 
 		BoardDto boardDto = boardService.insertBoard(boardForm);
 
@@ -85,10 +84,13 @@ public class BoardController {
 	/** 게시판 - 삭제 */
 	@RequestMapping(value = "/deleteBoard")
 	@ResponseBody
-	public BoardDto deleteBoard(HttpServletRequest request, HttpServletResponse response, BoardForm boardForm)
-			throws Exception {
+	public BoardDto deleteBoard(HttpServletRequest request, HttpServletResponse response, BoardForm boardForm) throws Exception {
+
+		MDC.put("TRANSACTION_ID", String.valueOf(boardForm.getBoard_seq()));
 
 		BoardDto boardDto = boardService.deleteBoard(boardForm);
+
+		MDC.remove("TRANSACTION_ID");
 
 		return boardDto;
 	}
@@ -103,10 +105,13 @@ public class BoardController {
 	/** 게시판 - 수정 */
 	@RequestMapping(value = "/updateBoard")
 	@ResponseBody
-	public BoardDto updateBoard(HttpServletRequest request, HttpServletResponse response, BoardForm boardForm)
-			throws Exception {
+	public BoardDto updateBoard(HttpServletRequest request, HttpServletResponse response, BoardForm boardForm) throws Exception {
+
+		MDC.put("TRANSACTION_ID", String.valueOf(boardForm.getBoard_seq()));
 
 		BoardDto boardDto = boardService.updateBoard(boardForm);
+
+		MDC.remove("TRANSACTION_ID");
 
 		return boardDto;
 	}
@@ -121,18 +126,21 @@ public class BoardController {
 	/** 게시판 - 답글 등록 */
 	@RequestMapping(value = "/insertBoardReply")
 	@ResponseBody
-	public BoardDto insertBoardReply(HttpServletRequest request, HttpServletResponse response, BoardForm boardForm)
-			throws Exception {
+	public BoardDto insertBoardReply(HttpServletRequest request, HttpServletResponse response, BoardForm boardForm) throws Exception {
+
+		MDC.put("TRANSACTION_ID", String.valueOf(boardForm.getBoard_seq()));
 
 		BoardDto boardDto = boardService.insertBoardReply(boardForm);
+
+		MDC.remove("TRANSACTION_ID");
 
 		return boardDto;
 	}
 
 	/** 게시판 - 첨부파일 다운로드 */
 	@RequestMapping("/fileDownload")
-	public ModelAndView fileDownload(@RequestParam("fileNameKey") String fileNameKey,
-			@RequestParam("fileName") String fileName, @RequestParam("filePath") String filePath) throws Exception {
+	public ModelAndView fileDownload(@RequestParam("fileNameKey") String fileNameKey, @RequestParam("fileName") String fileName,
+			@RequestParam("filePath") String filePath) throws Exception {
 
 		/** 첨부파일 정보 조회 */
 		Map<String, Object> fileInfo = new HashMap<String, Object>();

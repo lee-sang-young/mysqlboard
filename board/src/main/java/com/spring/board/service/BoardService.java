@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -19,8 +21,10 @@ import com.spring.board.form.BoardFileForm;
 import com.spring.board.form.BoardForm;
 import com.spring.board.form.CommonForm;
 
-@Service()
+@Service
 public class BoardService {
+
+	protected final Logger logger = LoggerFactory.getLogger(BoardService.class);
 
 	@Autowired
 	private BoardDao boardDao;
@@ -59,15 +63,10 @@ public class BoardService {
 		return resultUtil;
 	}
 
-	/** 게시판 - 목록 조회 */
-	/*
-	 * public List<BoardDto> getBoardList(BoardForm boardForm) throws Exception {
-	 * 
-	 * return boardDao.getBoardList(boardForm); }
-	 */
-
 	/** 게시판 - 상세 조회 */
 	public BoardDto getBoardDetail(BoardForm boardForm) throws Exception {
+
+		logger.debug("==================== getBoardDetail START ====================");
 
 		BoardDto boardDto = new BoardDto();
 
@@ -75,16 +74,17 @@ public class BoardService {
 
 		if ("S".equals(searchType)) {
 
-			int updateCnt = boardDao.updateBoardHits(boardForm);
-
-			if (updateCnt > 0) {
-				boardDto = boardDao.getBoardDetail(boardForm);
-			}
-
-		} else {
-
-			boardDto = boardDao.getBoardDetail(boardForm);
+			boardDao.updateBoardHits(boardForm);
 		}
+
+		boardDto = boardDao.getBoardDetail(boardForm);
+
+		BoardFileForm boardFileForm = new BoardFileForm();
+		boardFileForm.setBoard_seq(boardForm.getBoard_seq());
+
+		boardDto.setFiles(boardDao.getBoardFileList(boardFileForm));
+
+		logger.debug("==================== getBoardDetail END ====================");
 
 		return boardDto;
 	}
@@ -102,7 +102,6 @@ public class BoardService {
 		insertCnt = boardDao.insertBoard(boardForm);
 
 		List<BoardFileForm> boardFileList = getBoardFileInfo(boardForm);
-
 		for (BoardFileForm boardFileForm : boardFileList) {
 			boardDao.insertBoardFile(boardFileForm);
 		}
@@ -170,6 +169,8 @@ public class BoardService {
 
 	/** 게시판 - 삭제 */
 	public BoardDto deleteBoard(BoardForm boardForm) throws Exception {
+		
+		logger.debug("==================== deleteBoard START ====================");
 
 		BoardDto boardDto = new BoardDto();
 
@@ -181,22 +182,48 @@ public class BoardService {
 			boardDto.setResult("FAIL");
 		}
 
+		logger.debug("==================== deleteBoard START ====================");
+		
 		return boardDto;
 	}
 
 	/** 게시판 - 수정 */
 	public BoardDto updateBoard(BoardForm boardForm) throws Exception {
 
+		logger.debug("==================== updateBoard START ====================");
+		
 		BoardDto boardDto = new BoardDto();
 
-		int deleteCnt = boardDao.updateBoard(boardForm);
+		int updateCnt = boardDao.updateBoard(boardForm);
 
-		if (deleteCnt > 0) {
+		String deleteFile = boardForm.getDelete_file();
+		if (!"".equals(deleteFile)) {
+
+			String[] deleteFileInfo = deleteFile.split("!");
+
+			int boardSeq = Integer.parseInt(deleteFileInfo[0]);
+			int fileNo = Integer.parseInt(deleteFileInfo[1]);
+
+			BoardFileForm deleteBoardFileForm = new BoardFileForm();
+			deleteBoardFileForm.setBoard_seq(boardSeq);
+			deleteBoardFileForm.setFile_no(fileNo);
+
+			boardDao.deleteBoardFile(deleteBoardFileForm);
+		}
+
+		List<BoardFileForm> boardFileList = getBoardFileInfo(boardForm);
+		for (BoardFileForm boardFileForm : boardFileList) {
+			boardDao.insertBoardFile(boardFileForm);
+		}
+
+		if (updateCnt > 0) {
 			boardDto.setResult("SUCCESS");
 		} else {
 			boardDto.setResult("FAIL");
 		}
 
+		logger.debug("==================== updateBoard START ====================");
+		
 		return boardDto;
 	}
 
@@ -232,5 +259,4 @@ public class BoardService {
 
 		return UUID.randomUUID().toString().replaceAll("-", "");
 	}
-
 }

@@ -16,7 +16,8 @@
 		resultType="com.spring.board.dto.BoardDto">
 
 		SELECT *
-		FROM ( SELECT BOARD_SEQ
+		FROM (
+		SELECT BOARD_SEQ
 		, BOARD_RE_REF
 		, BOARD_RE_LEV
 		, BOARD_RE_SEQ
@@ -53,6 +54,8 @@
 		parameterType="com.spring.board.form.BoardForm"
 		resultType="com.spring.board.dto.BoardDto">
 
+		SELECT T1.*
+		FROM (
 		SELECT BOARD_SEQ
 		, BOARD_RE_REF
 		, BOARD_RE_LEV
@@ -70,6 +73,33 @@
 		UPD_DATE
 		FROM BOARD.TB_BOARD
 		WHERE BOARD_SEQ = #{board_seq}
+		) T1
+
+	</select>
+
+	<select id="getBoardFileList"
+		parameterType="com.spring.board.form.BoardFileForm"
+		resultType="com.spring.board.dto.BoardFileDto">
+
+		SELECT T1.*
+		FROM (
+		SELECT BOARD_SEQ
+		, FILE_NO
+		, FILE_NAME_KEY
+		, FILE_NAME
+		, FILE_PATH
+		, FILE_SIZE
+		, REMARK
+		, INS_USER_ID
+		, CAST( DATE_FORMAT( INS_DATE, '%Y-%m-%d %H:%i:%s' ) AS CHAR(19) ) AS
+		INS_DATE
+		, UPD_USER_ID
+		, CAST( DATE_FORMAT( UPD_DATE, '%Y-%m-%d %H:%i:%s' ) AS CHAR(19) ) AS
+		UPD_DATE
+		FROM TB_BOARD_FILE
+		WHERE BOARD_SEQ = #{board_seq}
+		AND DEL_YN = 'N'
+		) T1
 
 	</select>
 
@@ -276,5 +306,17 @@
 		)
 
 	</insert>
+
+	<delete id="deleteBoardFile"
+		parameterType="com.spring.board.form.BoardFileForm">
+
+		UPDATE BOARD.TB_BOARD_FILE
+		SET DEL_YN = 'Y'
+		, UPD_USER_ID = 'NONMEMBER'
+		, UPD_DATE = NOW()
+		WHERE BOARD_SEQ = #{board_seq}
+		AND FILE_NO = #{file_no}
+
+	</delete>
 
 </mapper>

@@ -1,6 +1,7 @@
 package com.spring.board.form;
 
 public class CommonForm {
+
 	String function_name;
 	int current_page_no;
 	int count_per_page;

@@ -1,5 +1,8 @@
 package com.spring.board.common;
 
+import com.spring.board.dto.CommonDto;
+import com.spring.board.form.CommonForm;
+
 public class PagingUtil {
 
 	public static CommonDto setPageUtil(CommonForm commonForm) {

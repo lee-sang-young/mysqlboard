@@ -1,78 +1,115 @@
 package com.spring.board.form;
 
-public class BoardFileForm extends CommonForm{
-	String function_name;
-	int current_page_no;
-	int count_per_page;
-	int count_per_list;
-	int tatal_page_count;
-	int tatal_list_count;
-	int limit;
-	int offset;
+import java.util.Date;
 
-	public String getFunction_name() {
-		return function_name;
+public class BoardFileForm extends CommonForm {
+
+	int board_seq;
+	int file_no;
+	String file_name_key;
+	String file_name;
+	String file_path;
+	String file_size;
+	String remark;
+	String del_yn;
+	String ins_user_id;
+	Date ins_date;
+	String upd_user_id;
+	Date upd_date;
+
+	public int getBoard_seq() {
+		return board_seq;
 	}
 
-	public void setFunction_name(String function_name) {
-		this.function_name = function_name;
+	public void setBoard_seq(int board_seq) {
+		this.board_seq = board_seq;
 	}
 
-	public int getCurrent_page_no() {
-		return current_page_no;
+	public int getFile_no() {
+		return file_no;
 	}
 
-	public void setCurrent_page_no(int current_page_no) {
-		this.current_page_no = current_page_no;
+	public void setFile_no(int file_no) {
+		this.file_no = file_no;
 	}
 
-	public int getCount_per_page() {
-		return count_per_page;
+	public String getFile_name_key() {
+		return file_name_key;
 	}
 
-	public void setCount_per_page(int count_per_page) {
-		this.count_per_page = count_per_page;
+	public void setFile_name_key(String file_name_key) {
+		this.file_name_key = file_name_key;
 	}
 
-	public int getCount_per_list() {
-		return count_per_list;
+	public String getFile_name() {
+		return file_name;
 	}
 
-	public void setCount_per_list(int count_per_list) {
-		this.count_per_list = count_per_list;
+	public void setFile_name(String file_name) {
+		this.file_name = file_name;
 	}
 
-	public int getTatal_page_count() {
-		return tatal_page_count;
+	public String getFile_path() {
+		return file_path;
 	}
 
-	public void setTatal_page_count(int tatal_page_count) {
-		this.tatal_page_count = tatal_page_count;
+	public void setFile_path(String file_path) {
+		this.file_path = file_path;
 	}
 
-	public int getTatal_list_count() {
-		return tatal_list_count;
+	public String getFile_size() {
+		return file_size;
 	}
 
-	public void setTatal_list_count(int tatal_list_count) {
-		this.tatal_list_count = tatal_list_count;
+	public void setFile_size(String file_size) {
+		this.file_size = file_size;
 	}
 
-	public int getLimit() {
-		return limit;
+	public String getRemark() {
+		return remark;
 	}
 
-	public void setLimit(int limit) {
-		this.limit = limit;
+	public void setRemark(String remark) {
+		this.remark = remark;
 	}
 
-	public int getOffset() {
-		return offset;
+	public String getDel_yn() {
+		return del_yn;
 	}
 
-	public void setOffset(int offset) {
-		this.offset = offset;
+	public void setDel_yn(String del_yn) {
+		this.del_yn = del_yn;
 	}
 
+	public String getIns_user_id() {
+		return ins_user_id;
+	}
+
+	public void setIns_user_id(String ins_user_id) {
+		this.ins_user_id = ins_user_id;
+	}
+
+	public Date getIns_date() {
+		return ins_date;
+	}
+
+	public void setIns_date(Date ins_date) {
+		this.ins_date = ins_date;
+	}
+
+	public String getUpd_user_id() {
+		return upd_user_id;
+	}
+
+	public void setUpd_user_id(String upd_user_id) {
+		this.upd_user_id = upd_user_id;
+	}
+
+	public Date getUpd_date() {
+		return upd_date;
+	}
+
+	public void setUpd_date(Date upd_date) {
+		this.upd_date = upd_date;
+	}
 }
-

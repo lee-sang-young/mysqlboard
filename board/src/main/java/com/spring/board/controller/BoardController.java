@@ -1,15 +1,20 @@
 package com.spring.board.controller;
 
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
+import com.spring.board.common.ResultUtil;
 import com.spring.board.dto.BoardDto;
 import com.spring.board.form.BoardForm;
 import com.spring.board.service.BoardService;
@@ -31,12 +36,12 @@ public class BoardController {
 	/** 게시판 - 목록 조회 */
 	@RequestMapping(value = "/getBoardList")
 	@ResponseBody
-	public List<BoardDto> getBoardList(HttpServletRequest request, HttpServletResponse response, BoardForm boardForm)
+	public ResultUtil getBoardList(HttpServletRequest request, HttpServletResponse response, BoardForm boardForm)
 			throws Exception {
 
-		List<BoardDto> boardDtoList = boardService.getBoardList(boardForm);
+		ResultUtil resultUtils = boardService.getBoardList(boardForm);
 
-		return boardDtoList;
+		return resultUtils;
 	}
 
 	/** 게시판 - 상세 페이지 이동 */
@@ -53,6 +58,8 @@ public class BoardController {
 			throws Exception {
 
 		BoardDto boardDto = boardService.getBoardDetail(boardForm);
+		
+		MDC.remove("TRANSACTION_ID");
 
 		return boardDto;
 	}
@@ -104,9 +111,10 @@ public class BoardController {
 		return boardDto;
 	}
 
-	/**게시판 - 답글페이지 이동*/
-	@RequestMapping(value="/boardReply")
-	public String boardReply(HttpServletRequest request, HttpServletResponse response)throws Exception{
+	/** 게시판 - 답글 페이지 이동 */
+	@RequestMapping(value = "/boardReply")
+	public String boardReply(HttpServletRequest request, HttpServletResponse response) throws Exception {
+
 		return "board/boardReply";
 	}
 
@@ -121,4 +129,17 @@ public class BoardController {
 		return boardDto;
 	}
 
+	/** 게시판 - 첨부파일 다운로드 */
+	@RequestMapping("/fileDownload")
+	public ModelAndView fileDownload(@RequestParam("fileNameKey") String fileNameKey,
+			@RequestParam("fileName") String fileName, @RequestParam("filePath") String filePath) throws Exception {
+
+		/** 첨부파일 정보 조회 */
+		Map<String, Object> fileInfo = new HashMap<String, Object>();
+		fileInfo.put("fileNameKey", fileNameKey);
+		fileInfo.put("fileName", fileName);
+		fileInfo.put("filePath", filePath);
+
+		return new ModelAndView("fileDownloadUtil", "fileInfo", fileInfo);
+	}
 }
